@@ -1,6 +1,6 @@
 # CyberChic 95 👗✨
 
-> **What if Cher Horowitz's computerized closet from _Clueless_ (1995) actually existed?**
+> **What if Cher Horowitz's computerized closet from** _Clueless_ **(1995) actually existed?**
 
 **CyberChic 95** is a retro-inspired digital wardrobe and outfit-matching app built around the iconic computerized closet from _Clueless_.
 
@@ -9,6 +9,32 @@ The project combines a playful **Windows 95-inspired interface** with a determin
 It is built as a **cross-platform application** using React Native and Expo, with support for iOS, Android, and Web.
 
 > 💿 _It's giving 1995 — but the code is very much 2026._
+
+---
+
+## 🎬 Demo
+
+Take a look at CyberChic 95 in action:
+
+[▶️ Watch the web demo](./assets/demo/web-demo.mp4)
+
+---
+
+## 📸 Screenshots
+
+### Mobile
+
+<p align="center">
+   <img src="./assets/screenshots/1.PNG" width="250" />
+   <img src="./assets/screenshots/2.PNG" width="250" />
+   <img src="./assets/screenshots/3.PNG" width="250" />
+</p>
+
+<p align="center">
+   <img src="./assets/screenshots/4.PNG" width="250" />
+   <img src="./assets/screenshots/5.PNG" width="250" />
+   <img src="./assets/screenshots/6.PNG" width="250" />
+</p>
 
 ---
 
@@ -247,8 +273,8 @@ CyberChic 95 is structured as a React Native application with separate layers fo
 │                  │  │                      │
 │ AsyncStorage     │  │ Expo AuthSession     │
 │ Wardrobe         │  │ WebBrowser           │
-│ Lookbook         │  │ Google integration   │
-│ Profiles         │  │                      │
+│ Lookbook         │  │ Google OAuth         │
+│ Profiles         │  │ integration structure│
 └──────────────────┘  └──────────────────────┘
 ```
 
@@ -274,7 +300,7 @@ CyberChic 95 is structured as a React Native application with separate layers fo
 
 - **Expo AuthSession**
 - **Expo WebBrowser**
-- Google OAuth integration
+- Google OAuth integration structure
 - Avatar resolution utilities
 
 ### Device APIs
@@ -354,6 +380,7 @@ Make sure you have:
 
 ```bash
 git clone https://github.com/dennysapopescu/CyberChic.git
+
 cd CyberChic
 ```
 
@@ -393,21 +420,24 @@ http://localhost:8081
 
 Install **Expo Go** on your iPhone or Android device and scan the QR code displayed by Expo.
 
-### 🧪 Run Automated Tests
+---
 
-CyberChic 95 includes an automated unit and integration test suite validating the algorithmic matching engine, HSL color harmony, pattern dynamics, formality matrices, DRESS ME generator, and AsyncStorage persistence integrity:
+## 🧪 Run Automated Tests
+
+CyberChic 95 includes an automated unit and integration test suite validating the algorithmic matching engine, HSL color harmony, pattern dynamics, formality matrices, DRESS ME generation, and AsyncStorage persistence:
 
 ```bash
 npm test
 ```
 
 Test coverage includes:
-- **Iconic Outfits:** Cher's signature yellow plaid and red Alaïa ensembles resolve to 100% matches.
+
+- **Iconic Outfits:** Cher's signature yellow plaid and red Alaïa combinations trigger the expected maximum match score.
 - **Color Theory & Neutral Anchoring:** HSL color conversions, monochrome tone-on-tone, analogous harmony, complementary balance, and neutral anchoring (black, white, denim, ivory).
-- **Pattern Dynamics:** Statement print grounding and heavy clash penalties on competing tartans/plaids ($\le 35\%$).
+- **Pattern Dynamics:** Statement print grounding and clash penalties on competing tartans/plaids.
 - **Style Matrix:** Formality synergy and dissonance across School, Chic, Party, Casual, and Grunge styles.
-- **DRESS ME Slot Machine:** Guarantees the slot machine algorithm produces valid, high-scoring outfits.
-- **Storage Persistence & Cascade Cleanup:** Verifies starter packs seed once per user, deletions are permanent without resurrection, edits update in-place, and user deletion cascades cleanly across wardrobe and lookbook keys.
+- **DRESS ME Generator:** Verifies that the outfit generator produces valid, compatible combinations.
+- **Storage Persistence & Cascade Cleanup:** Verifies starter packs seed once per user, deletions persist without resurrection, edits update in place, and user deletion removes associated wardrobe and lookbook data.
 
 ---
 
@@ -417,7 +447,9 @@ CyberChic includes an authentication layer designed around **Expo AuthSession** 
 
 The repository contains the OAuth integration structure and configuration placeholders required for connecting Google authentication to a specific development environment.
 
-To enable Google authentication for your own setup, you can configure your Google Cloud OAuth client IDs. The application also supports local profiles with custom avatars (selfies, gallery images, custom emojis) and immediate Gmail profile resolution, allowing the core wardrobe experience to work seamlessly offline.
+To enable Google authentication for your own setup, configure the appropriate Google Cloud OAuth client IDs.
+
+The application also supports local profiles with custom avatars (selfies, gallery images, and custom emojis), allowing the core wardrobe experience to work without a remote backend.
 
 ---
 
@@ -439,7 +471,7 @@ The project is built with React Native and Expo and targets:
 - Android
 - Web
 
-Responsive UI layouts adapt seamlessly between narrow smartphones (e.g. iPhone SE) and widescreen desktop browsers without overflow or clipped controls.
+Responsive UI layouts adapt between narrow smartphone screens and widescreen desktop browsers without overflow or clipped controls.
 
 ---
 
@@ -468,8 +500,9 @@ Verdict + explanation
 ```
 
 The same matching logic is shared by both:
+
 - the manual outfit carousel matcher
-- the **DRESS ME** slot machine generator
+- the **DRESS ME** outfit generator
 
 ---
 
@@ -483,7 +516,7 @@ The same matching logic is shared by both:
 - [x] Cascade deletion preventing orphaned AsyncStorage records
 - [x] Cross-platform responsive styling (Mobile, Tablet, Web)
 - [ ] Cloud backend synchronization (optional v2 feature)
-- [ ] Production Google Cloud OAuth client credentials for direct enterprise sign-in
+- [ ] Production Google OAuth client configuration
 - [ ] AI-powered background removal for snapped garment photos
 
 ---
