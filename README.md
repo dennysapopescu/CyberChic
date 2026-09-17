@@ -1,162 +1,532 @@
-# CyberChic 95 (Clueless Wardrobe) 👗✨
+# CyberChic 95 👗✨
 
-O aplicație universală de modă cross-platform (**iOS, Android, Tabletă, Web & Desktop**) inspirată din celebrul sistem digital de garderobă folosit de **Cher Horowitz** în filmul cult **Clueless (1995)**.
+> **What if Cher Horowitz's computerized closet from _Clueless_ (1995) actually existed?**
 
-Construită cu **Expo SDK 57 (React Native + Expo Web)** și **TypeScript**, aplicația include:
-- Motor inteligent de matching bazat pe teoria culorilor (HSL), armonie de tipare și compatibilitate stilistică pentru **orice haine adăugate de utilizator**.
-- Sistem multi-utilizator cu persistență locală complet izolată per cont (`AsyncStorage`).
-- Autentificare reală **Google OAuth 2.0** și rezoluție live a avatarelor prin Google/Gravatar.
-- Avatare foto personalizate prin cameră (`📸 SNAP SELFIE`) sau galerie (`🖼️ FROM GALLERY`), plus selector liber de emoji (`＋`).
-- Zero costuri de găzduire, 100% confidențialitate pe dispozitiv.
+**CyberChic 95** is a retro-inspired digital wardrobe and outfit-matching app built around the iconic computerized closet from _Clueless_.
+
+The project combines a playful **Windows 95-inspired interface** with a deterministic, rule-based fashion matching engine that evaluates colors, patterns, styles, seasons, and outfit compatibility.
+
+It is built as a **cross-platform application** using React Native and Expo, with support for iOS, Android, and Web.
+
+> 💿 _It's giving 1995 — but the code is very much 2026._
 
 ---
 
-## 🚀 Cum Se Rulează Aplicația (Quick Start)
+## ✨ Features
 
-### Pasul 1: Instalare Dependențe (la prima clonare)
+### 👗 Digital Wardrobe
+
+- Browse and manage your personal wardrobe
+- Add custom garments
+- Organize clothing by category
+- Use your own garment photos
+- View garment details and attributes
+- Create and save complete outfits to your **Lookbook**
+
+### 💅 Outfit Matching Engine
+
+CyberChic 95 includes a deterministic, rule-based matching engine implemented in [`matchEngine.ts`](src/services/matchEngine.ts).
+
+Instead of relying on a fixed set of predefined outfits, the engine evaluates **compatible garments added to the wardrobe** using multiple fashion-oriented heuristics:
+
+- HSL-based color analysis
+- Neutral-color detection
+- Monochromatic and analogous color relationships
+- Complementary color relationships
+- Pattern compatibility
+- Style compatibility
+- Season compatibility
+- Formality balance
+- Statement-piece vs. neutral-piece combinations
+- Special _Clueless_-inspired outfit rules
+
+The result is a match evaluation accompanied by a playful **MATCH / MIS-MATCH verdict** and Cher-inspired feedback.
+
+> **Note:** The matching engine is a deterministic rule-based system designed for the application's experience. Its scores represent the application's internal heuristics rather than objective measurements of fashion compatibility.
+
+---
+
+### 🎰 DRESS ME
+
+Don't know what to wear?
+
+Press **DRESS ME** and let CyberChic generate a compatible outfit from your wardrobe.
+
+The outfit generator uses the same matching logic as the manual matcher to search for suitable combinations rather than simply selecting two random garments.
+
+---
+
+### 📖 Lookbook
+
+Save your favorite combinations to your personal **Lookbook**.
+
+You can:
+
+- Save outfits
+- Browse saved looks
+- Equip a saved outfit
+- Delete looks
+- Keep your wardrobe and lookbook separated between local profiles
+
+---
+
+### 👤 Multiple Local Profiles
+
+CyberChic 95 supports multiple profiles on the same device.
+
+Each profile has its own:
+
+- Wardrobe
+- Lookbook
+- Display name
+- Avatar
+
+User-specific wardrobe and lookbook data are stored under isolated `AsyncStorage` keys.
+
+This makes it possible for multiple people to use the same installation without sharing their wardrobe data.
+
+---
+
+### 📸 Personal Avatars
+
+Create your own retro profile avatar using:
+
+- 📸 **SNAP SELFIE** — take a photo using the device camera
+- 🖼️ **FROM GALLERY** — select an existing image
+- ＋ **EMOJI** — choose a custom emoji avatar
+
+---
+
+### 🖥️ Retro 90s Interface
+
+The visual design is intentionally inspired by the aesthetics of:
+
+- Windows 95
+- Early personal-computer interfaces
+- _Clueless_ (1995)
+- 90s fashion
+- Retro desktop applications
+
+The interface includes:
+
+- Leopard-print background
+- Beveled Windows-style controls
+- Retro title bars
+- CRT scanline effect
+- Pixel-inspired visual details
+- Retro sound effects
+- Cher-inspired messages and easter eggs
+
+The retro aesthetic is not a limitation of the application — **it is the concept.**
+
+---
+
+## 🎬 _Clueless_ Inspiration
+
+The project is directly inspired by the fictional computerized wardrobe used by **Cher Horowitz**, played by Alicia Silverstone, in _Clueless_ (1995).
+
+The goal was not to recreate the movie interface pixel-for-pixel, but to turn the idea behind it into a real interactive application.
+
+Some details intentionally reference the film, including:
+
+- Cher-inspired fashion feedback
+- The iconic yellow plaid outfit
+- The red Alaïa dress
+- Retro computerized-closet interactions
+- 90s visual language
+
+These references are included as part of the project's creative concept and are not affiliated with or endorsed by the film or its rights holders.
+
+---
+
+## 🧠 How the Matching Engine Works
+
+The matching engine evaluates outfits using several independent rule groups.
+
+### 1. Color Harmony
+
+Garments are converted from hexadecimal color values into **HSL (Hue, Saturation, Lightness)** values.
+
+The engine considers relationships such as:
+
+- Neutral + vibrant color combinations
+- Monochromatic combinations
+- Analogous colors
+- Complementary colors
+- Saturation and lightness differences
+- Potentially conflicting color combinations
+
+Neutral garments can act as visual anchors for more saturated pieces.
+
+---
+
+### 2. Pattern Compatibility
+
+The engine evaluates whether patterns work together or compete visually.
+
+Examples include:
+
+- Statement pattern + solid neutral
+- Multiple compatible patterns
+- Conflicting prints
+- Plaid combinations
+- Animal print combinations
+- Floral patterns
+- Texture-related bonuses
+
+The goal is to prevent combinations where every garment competes for attention.
+
+---
+
+### 3. Style Compatibility
+
+Garments are associated with style categories such as:
+
+- `School`
+- `Chic`
+- `Party`
+- `Casual`
+- `Grunge`
+
+A compatibility matrix determines how well different style categories work together.
+
+The engine also considers formal vs. casual combinations to avoid severe mismatches.
+
+---
+
+### 4. Seasonal Compatibility
+
+Each garment can be associated with a season.
+
+The engine evaluates:
+
+- Spring
+- Summer
+- Autumn
+- Winter
+- All-season garments
+
+This adds another layer of compatibility on top of color, pattern, and style.
+
+---
+
+### 5. Iconic Outfit Rules
+
+Certain combinations receive special treatment as _Clueless_-inspired easter eggs.
+
+For example:
+
+**Yellow Plaid + matching pieces → ICONIC MATCH 💛**
+
+These rules are intentionally separate from the general matching heuristics so that recognizable movie-inspired combinations can trigger their own experience.
+
+---
+
+## 🏗️ Architecture
+
+CyberChic 95 is structured as a React Native application with separate layers for UI, domain logic, local persistence, and authentication.
+
+```text
+┌─────────────────────────────────────────────┐
+│                  React UI                   │
+│                                             │
+│  Wardrobe · Matcher · Lookbook · Profile   │
+└───────────────────┬─────────────────────────┘
+                    │
+                    ▼
+┌─────────────────────────────────────────────┐
+│              Application Logic              │
+│                                             │
+│  matchEngine.ts · dressMe.ts · UI state    │
+└───────────────────┬─────────────────────────┘
+                    │
+          ┌─────────┴─────────┐
+          ▼                   ▼
+┌──────────────────┐  ┌──────────────────────┐
+│ Local Persistence│  │ Authentication Layer │
+│                  │  │                      │
+│ AsyncStorage     │  │ Expo AuthSession     │
+│ Wardrobe         │  │ WebBrowser           │
+│ Lookbook         │  │ Google integration   │
+│ Profiles         │  │                      │
+└──────────────────┘  └──────────────────────┘
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- **React Native**
+- **Expo SDK 57**
+- **TypeScript**
+- **React Native Web**
+- **Lucide React Native**
+- **SVG**
+
+### Data & Persistence
+
+- **AsyncStorage**
+- Browser Web Storage through the React Native Web environment
+
+### Authentication / External Services
+
+- **Expo AuthSession**
+- **Expo WebBrowser**
+- Google OAuth integration
+- Avatar resolution utilities
+
+### Device APIs
+
+- Camera
+- Image Picker
+- Local image handling
+- Audio / Web Audio-based sound effects
+
+---
+
+## 📁 Project Structure
+
+```text
+CyberChic/
+├── App.tsx
+├── app.json
+├── package.json
+├── .gitignore
+│
+└── src/
+    ├── types/
+    │   └── wardrobe.ts
+    │
+    ├── theme/
+    │   └── retroTheme.ts
+    │
+    ├── services/
+    │   ├── soundEffects.ts
+    │   ├── storage.ts
+    │   ├── matchEngine.ts
+    │   ├── dressMe.ts
+    │   └── googleAuth.ts
+    │
+    ├── data/
+    │   └── starterPack.ts
+    │
+    └── components/
+        ├── retro/
+        │   ├── LeopardBackground.tsx
+        │   ├── RetroWindow.tsx
+        │   ├── BevelButton.tsx
+        │   ├── VerdictBanner.tsx
+        │   └── CRTOverlay.tsx
+        │
+        ├── matcher/
+        │   ├── GarmentCarouselCard.tsx
+        │   ├── GarmentIllustration.tsx
+        │   └── CategoryBar.tsx
+        │
+        ├── wardrobe/
+        │   ├── BrowseModal.tsx
+        │   ├── AddGarmentModal.tsx
+        │   ├── LookbookModal.tsx
+        │   └── GarmentDetailModal.tsx
+        │
+        ├── profile/
+        │   └── UserProfileModal.tsx
+        │
+        └── auth/
+            └── LoginModal.tsx
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have:
+
+- Node.js installed
+- npm installed
+- Expo-compatible development environment
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/dennysapopescu/CyberChic.git
+cd CyberChic
+```
+
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
----
+### 3. Start the development server
 
-### Pasul 2: Pornire Aplicație
+```bash
+npx expo start
+```
 
-#### 💻 Opțiunea A: În Browser (Recomandat pentru Desktop / Portofoliu)
+### Run on the web
+
+For the easiest way to explore the application:
+
 ```bash
 npm run web
 ```
-*sau:*
+
+or:
+
 ```bash
 npx expo start --web
 ```
-🌐 Aplicația se deschide automat în browser la: **`http://localhost:8081`** recreând estetica unui monitor retro Windows 95 pe fundal leopard.
 
----
+The application will be available at:
 
-#### 📱 Opțiunea B: Pe Telefon (iPhone sau Android prin Expo Go — Gratuit)
-1. Descarcă gratuit aplicația **Expo Go** din [App Store (iOS)](https://apps.apple.com/app/expo-go/id982107779) sau [Google Play (Android)](https://play.google.com/store/apps/details?id=host.exp.exponent).
-2. În terminalul din calculator, pornește serverul Expo:
-   ```bash
-   npx expo start
-   ```
-3. Scanează codul QR afișat în terminal:
-   - **Pe iPhone:** Deschide aplicația **Camera** nativă și apasă notificarea galbenă *„Open in Expo Go”*.
-   - **Pe Android:** Deschide aplicația **Expo Go** și apasă *„Scan QR code”*.
-
----
-
-## 🧠 Motorul de Matching Inteligent & Dinamic
-
-Spre deosebire de un sistem cu reguli rigide, [`matchEngine.ts`](src/services/matchEngine.ts) folosește un algoritm multi-dimensional de fashion theory care evaluează armonios **atât hainele predefinite, cât și orice piesă nouă adăugată de utilizator**:
-
-1. **Teoria Culorilor & Armonie Cromatică (Pondere 35%):**
-   - Conversie Hexadecimal $\rightarrow$ HSL (Hue, Saturation, Lightness).
-   - **Detectare Neutre:** Negru, alb, fildeș, gri, cămilă/bej și denim. Orice piesă neutră ancorează o culoare vibrantă (scor $\ge 94\%$).
-   - **Monocromie & Ton-pe-ton:** $\Delta H \le 25^\circ$ cu variație de luminozitate pentru profunzime elegantă ($\sim 93\%$).
-   - **Armonie Analoagă:** Nuanțe vecine pe cercul culorilor ($25^\circ < \Delta H \le 65^\circ$) ($\sim 90\%$).
-   - **Contrast Complementar:** Nuanțe opuse ($145^\circ - 215^\circ$) cu saturație controlată ($\sim 88\%$).
-   - **Clash Primar Penalizat:** Roșu aprins + galben saturat fără ancoră neutră este penalizat drastic ($\le 25\%$).
-
-2. **Echilibru de Tipare & Texturi (Pondere 30%):**
-   - **Piesă Statement + Piesă Neutră:** Regula de aur în modă (carouri/animal print/floral + solid neted) $\rightarrow$ scor maxim ($\sim 95\%$).
-   - **Clash de Printuri:** Două carouri diferite sau combinații conflictuale (ex: carouri + animal print) declanșează replica Cher de alertă ($\le 20\%$).
-   - **Textură Luminate:** Piese metalice sau satinate evaluate cu bonus de textură.
-
-3. **Compatibilitate Stilistică & Formalitate (Pondere 25%):**
-   - Matrice de compatibilitate între stiluri (`School`, `Chic`, `Party`, `Casual`, `Grunge`).
-   - Evită nepotrivirile severe de formalitate (ex: top couture de petrecere cu pantaloni de trening slouchy $\rightarrow$ scor $\le 35\%$).
-
-4. **Compatibilitate Sezonieră (Pondere 10%):**
-   - Piese din sezoane complementare sau piese pentru toate sezoanele (`All`).
-
-5. **Easter Eggs Iconice Clueless (Prioritate 100%):**
-   - Setul galben în carouri (*Yellow Plaid*) și rochia roșie Alaïa sunt recunoscute instant cu statutul **ICONIC MATCH** ($100\%$).
-
----
-
-## 🔐 Autentificare & Stocare per Utilizator
-
-- **Instalare Curată (Zero conturi hardcodate):** La prima lansare, aplicația întâmpină utilizatorul cu asistentul de configurare: `FIRST TIME SETUP WIZARD`.
-- **Autentificare Google (Gmail):** Buton dedicat `🔴 SIGN IN WITH GOOGLE (GMAIL)` folosind standardul **OAuth 2.0** (`expo-auth-session` + `WebBrowser`). Include rezoluție dinamică prin `unavatar.io` pentru a prelua live poza publică a contului Google asociat.
-- **Dulap Offline Privat:** Posibilitatea de a crea oricând un profil local 100% privat, fără internet.
-- **Izolare Totală a Datelor:** Piesele vestimentare și lookbook-urile sunt izolate strict pe bază de chei unice (`@cyberchic_garments_user_${userId}` și `@cyberchic_lookbook_user_${userId}`).
-- **Avatare Personalizate („Add Yours”):**
-  - Buton `📸 SNAP SELFIE` pentru poză pe loc cu camera.
-  - Buton `🖼️ FROM GALLERY` pentru orice fotografie din memoria dispozitivului.
-  - Buton `＋` pentru a introduce liber orice emoji preferat (`🦄`, `🍒`, `🦋`, `🖤`, etc.).
-
----
-
-## 📁 Structura Proiectului
-
-```
-CyberChic/
-├── App.tsx                          # Componenta rădăcină (SafeAreaProvider, Carusele, Stări)
-├── app.json                         # Configurație Expo (bundleIdentifier, permisiuni cameră)
-├── package.json                     # Dependențe Expo SDK 57, React 19, TypeScript
-├── .gitignore                       # Filtrare securizată fișiere pentru GitHub
-├── src/
-│   ├── types/
-│   │   └── wardrobe.ts              # Interfețe TypeScript (Garment, Outfit, UserAccount)
-│   ├── theme/
-│   │   └── retroTheme.ts            # Culori pastelate anii '90, texturi și bevels Windows 95
-│   ├── services/
-│   │   ├── soundEffects.ts          # Sintetizator Web Audio retro (fără fișiere audio externe)
-│   │   ├── storage.ts               # Persistență AsyncStorage partiționată per user
-│   │   ├── matchEngine.ts           # Algoritm matematic de armonie cromatică HSL & replici Cher
-│   │   ├── dressMe.ts               # Generatorul automat de ținute (slot machine)
-│   │   └── googleAuth.ts            # Serviciu Google OAuth 2.0 & Unavatar profile resolver
-│   ├── data/
-│   │   └── starterPack.ts           # Hainele iconice din filmul Clueless
-│   └── components/
-│       ├── retro/
-│       │   ├── LeopardBackground.tsx # Fundal vectorial imprimat leopard
-│       │   ├── RetroWindow.tsx       # Fereastră retro Windows 95 cu bară de titlu și avatar
-│       │   ├── BevelButton.tsx       # Butoane 3D reliefate cu feedback tactil & audio
-│       │   ├── VerdictBanner.tsx     # Banner intermitent MATCH! vs. MIS-MATCH!
-│       │   └── CRTOverlay.tsx        # Linii de scanare CRT opționale
-│       ├── matcher/
-│       │   ├── GarmentCarouselCard.tsx # Carusele sincronizate cu butoane << | >> și swipe
-│       │   ├── GarmentIllustration.tsx # Ilustrații vectoriale de înaltă fidelitate
-│       │   └── CategoryBar.tsx         # Bara inferioară de navigare și dock de comenzi
-│       ├── wardrobe/
-│       │   ├── BrowseModal.tsx       # Explorator inventar haine
-│       │   ├── AddGarmentModal.tsx   # Adăugare haine prin cameră foto sau galerie
-│       │   ├── LookbookModal.tsx     # Arhiva de ținute salvate cu echipare la un clic
-│       │   └── GarmentDetailModal.tsx # Inspector detalii textile și materiale
-│       ├── profile/
-│       │   └── UserProfileModal.tsx  # Legitimație membru VIP, schimbare nume și selfie
-│       └── auth/
-│           └── LoginModal.tsx        # Login Google, creare conturi, cameră selfie și emoji +
+```text
+http://localhost:8081
 ```
 
----
+### Run on a mobile device
 
-## 📤 Publicare pe GitHub
-
-Repository-ul este curățat și configurat cu un fișier [`.gitignore`](.gitignore) strict, care **blochează** automat:
-- `node_modules/`
-- `.env*` (chei secrete și variabile de mediu)
-- `.expo/` (stări locale și cache de dezvoltator)
-- `dist/` & `web-build/` (build-uri generate)
-- `.claude/` și configurări interne de IDE
-- `.DS_Store` și fișiere de sistem
-
-### Comenzi pentru a urca proiectul pe contul tău de GitHub:
-
-1. **Creează un repository nou** pe [GitHub.com](https://github.com/new) (ex: `CyberChic`).
-2. **Rulează în terminalul proiectului:**
-   ```bash
-   git add .
-   git commit -m "feat: CyberChic 95 Clueless Wardrobe initial release"
-   git remote add origin https://github.com/USERNAME/CyberChic.git
-   git branch -M main
-   git push -u origin main
-   ```
-*(Înlocuiește `USERNAME` cu numele tău de utilizator de pe GitHub).*
+Install **Expo Go** on your iPhone or Android device and scan the QR code displayed by Expo.
 
 ---
 
-## 💎 Zero Costuri de Găzduire & Confidențialitate
-Toate datele, pozele și garderobele sunt stocate în siguranță pe dispozitiv prin `AsyncStorage` / Web Storage. Aplicația funcționează perfect offline, fără servere scumpe sau abonamente lunare.
+## 🔐 Authentication
+
+CyberChic includes an authentication layer designed around **Expo AuthSession** and Google OAuth.
+
+The repository currently contains the OAuth integration structure and configuration placeholders required for connecting Google authentication to a specific development environment.
+
+To enable Google authentication for your own setup, you will need to configure the appropriate OAuth client IDs and redirect settings.
+
+The application also supports local profiles, allowing the core wardrobe experience to be used without requiring a remote backend.
+
+---
+
+## 💾 Data & Privacy
+
+CyberChic 95 is intentionally designed without a dedicated application backend.
+
+Wardrobe, lookbook, profile, and application settings are persisted locally using **AsyncStorage** and, on web, the corresponding browser storage mechanism.
+
+This means there is no CyberChic database storing your wardrobe on a remote server.
+
+However, local storage should not be interpreted as absolute security or anonymity: data stored on a device is subject to that device's operating system, browser, backups, and other local security mechanisms.
+
+---
+
+## 📱 Platform Support
+
+The project is built with React Native and Expo and targets:
+
+- iOS
+- Android
+- Web
+
+Tablet and desktop experiences are supported through the responsive UI, although the project is primarily designed as a cross-platform application rather than a native desktop application.
+
+---
+
+## 🧪 Development Notes
+
+The project intentionally keeps the outfit matching logic separate from the presentation layer.
+
+This makes it possible to evolve the fashion engine independently from the UI.
+
+For example:
+
+```text
+Garment
+   ↓
+Color analysis
+   ↓
+Pattern analysis
+   ↓
+Style compatibility
+   ↓
+Season compatibility
+   ↓
+Match score
+   ↓
+Verdict + feedback
+```
+
+The same matching logic can then be reused by both:
+
+- the manual outfit matcher
+- the **DRESS ME** generator
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] Complete production Google OAuth configuration
+- [ ] Add automated tests for the matching engine
+- [ ] Add automated tests for wardrobe and profile persistence
+- [ ] Improve outfit generation with more advanced search strategies
+- [ ] Add personalized matching based on user preferences
+- [ ] Add wardrobe statistics and insights
+- [ ] Improve image management for custom garments
+- [ ] Add cloud synchronization as an optional feature
+- [ ] Add more _Clueless_-inspired easter eggs
+- [ ] Prepare production builds for mobile distribution
+
+---
+
+## 🎯 Why I Built It
+
+CyberChic 95 started with a simple question:
+
+> **What if Cher Horowitz's computerized closet wasn't just a movie prop?**
+
+I wanted to take that fictional idea and turn it into a real application — while deliberately keeping the playful, slightly ridiculous 90s computer aesthetic.
+
+Technically, the project gave me an opportunity to work with:
+
+- React Native
+- Expo
+- TypeScript
+- Local persistence
+- Device APIs
+- Authentication flows
+- Rule-based recommendation logic
+- Responsive cross-platform UI
+- Component-based architecture
+
+But most importantly, it was an excuse to build something **fun**.
+
+---
+
+## 📌 Project Status
+
+**CyberChic 95 is a personal portfolio project.**
+
+It is currently intended for development and demonstration purposes and is **not published on the App Store or Google Play**.
+
+The source code is publicly available on GitHub for anyone interested in exploring the implementation.
+
+---
+
+## 📄 License
+
+This project is provided for educational and portfolio purposes.
+
+See [`LICENSE`](LICENSE) for the applicable license.
+
+---
+
+## 🖤 Credits & Inspiration
+
+Inspired by:
+
+- _Clueless_ (1995)
+- Cher Horowitz
+- 90s fashion
+- Windows 95-era interfaces
+- The idea of a computerized wardrobe
+
+**CyberChic 95 is an independent personal project and is not affiliated with, sponsored by, or endorsed by the creators or rights holders of _Clueless_.**
