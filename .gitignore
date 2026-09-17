@@ -1,0 +1,56 @@
+# Dependencies
+node_modules/
+
+# Production builds & bundler cache
+dist/
+web-build/
+.expo/
+expo-env.d.ts
+*.tsbuildinfo
+
+# AI & Editor configurations
+.claude/
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment variables & secrets (CRITICAL: never commit to GitHub)
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Native keystores, certificates & credentials
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+*.orig.*
+.kotlin/
+/ios
+/android
+
+# Metro & Logs
+.metro-health-check*
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS artifacts
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary & test files
+scratch/
+coverage/
