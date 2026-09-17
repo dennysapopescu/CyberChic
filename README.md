@@ -25,15 +25,15 @@ Take a look at CyberChic 95 in action:
 ### Mobile
 
 <p align="center">
-   <img src="./assets/screenshots/1.PNG" width="250" />
-   <img src="./assets/screenshots/2.PNG" width="250" />
-   <img src="./assets/screenshots/3.PNG" width="250" />
+   <img src="./assets/screenshots/1.PNG" width="200" />
+   <img src="./assets/screenshots/2.PNG" width="200" />
+   <img src="./assets/screenshots/3.PNG" width="200" />
 </p>
 
 <p align="center">
-   <img src="./assets/screenshots/4.PNG" width="250" />
-   <img src="./assets/screenshots/5.PNG" width="250" />
-   <img src="./assets/screenshots/6.PNG" width="250" />
+   <img src="./assets/screenshots/4.PNG" width="200" />
+   <img src="./assets/screenshots/5.PNG" width="200" />
+   <img src="./assets/screenshots/6.PNG" width="200" />
 </p>
 
 ---
