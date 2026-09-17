@@ -38,7 +38,9 @@ export default function App() {
 
   // Modals state
   const [isBrowseOpen, setIsBrowseOpen] = useState(false);
+  const [browseCategory, setBrowseCategory] = useState<'all' | GarmentCategory>('all');
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [editingGarment, setEditingGarment] = useState<Garment | null>(null);
   const [isLookbookOpen, setIsLookbookOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -190,16 +192,26 @@ export default function App() {
     }
   };
 
-  // Add custom garment
-  const handleSaveNewGarment = async (newGarment: Garment) => {
+  // Add or edit garment
+  const handleSaveGarment = async (garment: Garment) => {
     const userId = activeUser ? activeUser.id : 'guest';
-    const updated = await StorageService.saveGarment(newGarment, userId);
+    const updated = await StorageService.saveGarment(garment, userId);
     setGarments(updated);
-    if (newGarment.category === 'top') {
-      setTopIndex(0);
-    } else if (newGarment.category === 'bottom') {
-      setBottomIndex(0);
+    if (!editingGarment) {
+      if (garment.category === 'top') {
+        setTopIndex(0);
+      } else if (garment.category === 'bottom') {
+        setBottomIndex(0);
+      }
     }
+    setEditingGarment(null);
+  };
+
+  const handleEditGarment = (garment: Garment) => {
+    setEditingGarment(garment);
+    setIsBrowseOpen(false);
+    setInspectGarment(null);
+    setIsAddOpen(true);
   };
 
   // Delete garment
@@ -409,9 +421,13 @@ export default function App() {
                 }
               }}
               onSelectCategoryFilter={(cat) => {
+                setBrowseCategory(cat);
                 setIsBrowseOpen(true);
               }}
-              onOpenBrowse={() => setIsBrowseOpen(true)}
+              onOpenBrowse={() => {
+                setBrowseCategory('all');
+                setIsBrowseOpen(true);
+              }}
               onDressMe={handleDressMe}
               onOpenLookbook={() => setIsLookbookOpen(true)}
               isSpinning={isSpinning}
@@ -455,22 +471,29 @@ export default function App() {
         visible={isBrowseOpen}
         userName={currentUserName}
         garments={garments}
+        initialCategory={browseCategory}
         onClose={() => setIsBrowseOpen(false)}
         onSelectGarment={handleSelectFromBrowse}
         onOpenAddModal={() => {
+          setEditingGarment(null);
           setIsBrowseOpen(false);
           setIsAddOpen(true);
         }}
+        onEditGarment={handleEditGarment}
         onDeleteGarment={handleDeleteGarment}
         onResetWardrobe={handleResetWardrobe}
       />
 
-      {/* Add Garment Modal */}
+      {/* Add / Edit Garment Modal */}
       <AddGarmentModal
         visible={isAddOpen}
         userName={currentUserName}
-        onClose={() => setIsAddOpen(false)}
-        onSave={handleSaveNewGarment}
+        editingGarment={editingGarment}
+        onClose={() => {
+          setEditingGarment(null);
+          setIsAddOpen(false);
+        }}
+        onSave={handleSaveGarment}
       />
 
       {/* Lookbook Modal */}
@@ -492,6 +515,7 @@ export default function App() {
         visible={!!inspectGarment}
         garment={inspectGarment}
         onClose={() => setInspectGarment(null)}
+        onEdit={handleEditGarment}
       />
     </LeopardBackground>
   </SafeAreaProvider>

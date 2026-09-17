@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import { SoundEffects } from '../../services/soundEffects';
 interface AddGarmentModalProps {
   visible: boolean;
   userName?: string;
+  editingGarment?: Garment | null;
   onClose: () => void;
   onSave: (garment: Garment) => void;
 }
@@ -38,6 +39,7 @@ const COLOR_PALETTE = [
 export const AddGarmentModal: React.FC<AddGarmentModalProps> = ({
   visible,
   userName = 'User',
+  editingGarment = null,
   onClose,
   onSave,
 }) => {
@@ -48,6 +50,24 @@ export const AddGarmentModal: React.FC<AddGarmentModalProps> = ({
   const [selectedColor, setSelectedColor] = useState(COLOR_PALETTE[0]);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    if (visible && editingGarment) {
+      setName(editingGarment.name);
+      setCategory(editingGarment.category);
+      setStyleMood(editingGarment.style);
+      setPattern(editingGarment.pattern);
+      const matchedColor =
+        COLOR_PALETTE.find(
+          (c) => c.hex.toLowerCase() === editingGarment.color.toLowerCase()
+        ) || { name: editingGarment.colorName || 'Custom', hex: editingGarment.color };
+      setSelectedColor(matchedColor);
+      setImageUri(editingGarment.imageUri || null);
+      setDescription(editingGarment.description || '');
+    } else if (visible && !editingGarment) {
+      resetForm();
+    }
+  }, [visible, editingGarment]);
 
   const pickImageFromGallery = async () => {
     try {
@@ -96,22 +116,37 @@ export const AddGarmentModal: React.FC<AddGarmentModalProps> = ({
       return;
     }
 
-    const newGarment: Garment = {
-      id: `custom-${Date.now()}`,
-      name: name.trim(),
-      category,
-      color: selectedColor.hex,
-      colorName: selectedColor.name,
-      pattern,
-      style: styleMood,
-      season: 'All',
-      imageUri: imageUri || undefined,
-      description: description.trim() || `Custom piece added to ${userName}’s wardrobe.`,
-      isCustom: true,
-      createdAt: Date.now(),
-    };
+    if (editingGarment) {
+      const updatedGarment: Garment = {
+        ...editingGarment,
+        name: name.trim(),
+        category,
+        color: selectedColor.hex,
+        colorName: selectedColor.name,
+        pattern,
+        style: styleMood,
+        imageUri: imageUri || undefined,
+        description: description.trim() || editingGarment.description,
+      };
+      onSave(updatedGarment);
+    } else {
+      const newGarment: Garment = {
+        id: `custom-${Date.now()}`,
+        name: name.trim(),
+        category,
+        color: selectedColor.hex,
+        colorName: selectedColor.name,
+        pattern,
+        style: styleMood,
+        season: 'All',
+        imageUri: imageUri || undefined,
+        description: description.trim() || `Custom piece added to ${userName}’s wardrobe.`,
+        isCustom: true,
+        createdAt: Date.now(),
+      };
+      onSave(newGarment);
+    }
 
-    onSave(newGarment);
     SoundEffects.play('match');
     resetForm();
     onClose();
@@ -133,7 +168,9 @@ export const AddGarmentModal: React.FC<AddGarmentModalProps> = ({
         <View style={styles.windowFrame}>
           {/* 90s Title Bar */}
           <View style={styles.titleBar}>
-            <Text style={styles.titleText}>ADD NEW CLOTHES — DIGITIZER WIZARD</Text>
+            <Text style={styles.titleText}>
+              {editingGarment ? 'EDIT CLOTHES — DIGITIZER WIZARD' : 'ADD NEW CLOTHES — DIGITIZER WIZARD'}
+            </Text>
             <Pressable onPress={onClose} style={styles.closeBtn}>
               <Text style={styles.closeBtnText}>✕</Text>
             </Pressable>
@@ -291,7 +328,7 @@ export const AddGarmentModal: React.FC<AddGarmentModalProps> = ({
               style={styles.footerBtn}
             />
             <BevelButton
-              title="💾 SAVE TO WARDROBE"
+              title={editingGarment ? '💾 UPDATE ITEM' : '💾 SAVE TO WARDROBE'}
               variant="green"
               size="md"
               onPress={handleSave}

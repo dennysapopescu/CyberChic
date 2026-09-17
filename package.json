@@ -27,7 +27,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "npx tsc src/services/matchEngine.ts src/services/dressMe.ts src/data/starterPack.ts --outDir ./tests/.cache --module commonjs --target es2022 --skipLibCheck --esModuleInterop --ignoreConfig && node --test tests/matchEngine.test.js tests/storage.test.js"
   },
   "private": true
 }

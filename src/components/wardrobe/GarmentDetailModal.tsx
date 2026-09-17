@@ -9,12 +9,14 @@ interface GarmentDetailModalProps {
   visible: boolean;
   garment: Garment | null;
   onClose: () => void;
+  onEdit?: (garment: Garment) => void;
 }
 
 export const GarmentDetailModal: React.FC<GarmentDetailModalProps> = ({
   visible,
   garment,
   onClose,
+  onEdit,
 }) => {
   if (!garment) return null;
 
@@ -72,8 +74,20 @@ export const GarmentDetailModal: React.FC<GarmentDetailModalProps> = ({
               </View>
             ) : null}
 
-            {/* Close Button */}
+            {/* Footer Buttons */}
             <View style={styles.footer}>
+              {onEdit && (
+                <BevelButton
+                  title="✏️ EDIT ITEM"
+                  variant="yellow"
+                  size="md"
+                  onPress={() => {
+                    onClose();
+                    onEdit(garment);
+                  }}
+                  style={styles.actionBtn}
+                />
+              )}
               <BevelButton
                 title="CLOSE INSPECTOR"
                 variant="pink"
@@ -189,9 +203,11 @@ const styles = StyleSheet.create({
     lineHeight: 16,
   },
   footer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
   },
   actionBtn: {
-    width: '100%',
+    flex: 1,
   },
 });

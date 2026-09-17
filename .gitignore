@@ -54,3 +54,5 @@ Thumbs.db
 # Temporary & test files
 scratch/
 coverage/
+.cache/
+tests/.cache/

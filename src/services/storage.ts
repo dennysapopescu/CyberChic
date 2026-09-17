@@ -103,6 +103,9 @@ export const StorageService = {
     if (activeId === userId) {
       await AsyncStorage.setItem(KEYS.ACTIVE_USER_ID, filtered[0].id);
     }
+    // Cascade delete garments and lookbook for deleted user to prevent orphaned data
+    await AsyncStorage.removeItem(`${KEYS.GARMENTS_PREFIX}${userId}`);
+    await AsyncStorage.removeItem(`${KEYS.LOOKBOOK_PREFIX}${userId}`);
     return filtered;
   },
 
@@ -114,20 +117,11 @@ export const StorageService = {
       const key = `${KEYS.GARMENTS_PREFIX}${uid}`;
       const stored = await AsyncStorage.getItem(key);
       if (!stored) {
-        // Seed new user with starter pack
+        // Seed new user with starter pack once
         await AsyncStorage.setItem(key, JSON.stringify(STARTER_GARMENTS));
         return STARTER_GARMENTS;
       }
-      const parsed: Garment[] = JSON.parse(stored);
-      // Ensure starter pack items are included
-      const existingIds = new Set(parsed.map((g) => g.id));
-      const missing = STARTER_GARMENTS.filter((g) => !existingIds.has(g.id));
-      if (missing.length > 0) {
-        const merged = [...parsed, ...missing];
-        await AsyncStorage.setItem(key, JSON.stringify(merged));
-        return merged;
-      }
-      return parsed;
+      return JSON.parse(stored);
     } catch (e) {
       return STARTER_GARMENTS;
     }
@@ -139,7 +133,10 @@ export const StorageService = {
       const uid = userId || active?.id || 'guest';
       const key = `${KEYS.GARMENTS_PREFIX}${uid}`;
       const current = await this.getGarments(uid);
-      const updated = [garment, ...current.filter((g) => g.id !== garment.id)];
+      const exists = current.some((g) => g.id === garment.id);
+      const updated = exists
+        ? current.map((g) => (g.id === garment.id ? garment : g))
+        : [garment, ...current];
       await AsyncStorage.setItem(key, JSON.stringify(updated));
       return updated;
     } catch (e) {

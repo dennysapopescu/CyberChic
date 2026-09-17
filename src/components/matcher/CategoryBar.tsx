@@ -171,9 +171,11 @@ const styles = StyleSheet.create({
   utilityRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 8,
+    gap: 6,
+    flexWrap: 'wrap',
   },
   utilBtn: {
-    minWidth: 120,
+    flex: 1,
+    minWidth: 85,
   },
 });

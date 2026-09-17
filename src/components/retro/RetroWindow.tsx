@@ -53,8 +53,14 @@ export const RetroWindow: React.FC<RetroWindowProps> = ({
               <Text style={styles.appIconText}>{userAvatar}</Text>
             )}
           </Pressable>
-          <Text style={styles.titleText}>{title}</Text>
-          {subtitle ? <Text style={styles.subtitleText}>{subtitle}</Text> : null}
+          <Text style={styles.titleText} numberOfLines={1} ellipsizeMode="tail">
+            {title}
+          </Text>
+          {subtitle ? (
+            <Text style={styles.subtitleText} numberOfLines={1} ellipsizeMode="tail">
+              {subtitle}
+            </Text>
+          ) : null}
         </View>
 
         {/* User Badge Button */}
@@ -141,6 +147,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    flexShrink: 1,
+    marginRight: 4,
   },
   appIconBox: {
     width: 20,

@@ -393,29 +393,41 @@ http://localhost:8081
 
 Install **Expo Go** on your iPhone or Android device and scan the QR code displayed by Expo.
 
+### 🧪 Run Automated Tests
+
+CyberChic 95 includes an automated unit and integration test suite validating the algorithmic matching engine, HSL color harmony, pattern dynamics, formality matrices, DRESS ME generator, and AsyncStorage persistence integrity:
+
+```bash
+npm test
+```
+
+Test coverage includes:
+- **Iconic Outfits:** Cher's signature yellow plaid and red Alaïa ensembles resolve to 100% matches.
+- **Color Theory & Neutral Anchoring:** HSL color conversions, monochrome tone-on-tone, analogous harmony, complementary balance, and neutral anchoring (black, white, denim, ivory).
+- **Pattern Dynamics:** Statement print grounding and heavy clash penalties on competing tartans/plaids ($\le 35\%$).
+- **Style Matrix:** Formality synergy and dissonance across School, Chic, Party, Casual, and Grunge styles.
+- **DRESS ME Slot Machine:** Guarantees the slot machine algorithm produces valid, high-scoring outfits.
+- **Storage Persistence & Cascade Cleanup:** Verifies starter packs seed once per user, deletions are permanent without resurrection, edits update in-place, and user deletion cascades cleanly across wardrobe and lookbook keys.
+
 ---
 
 ## 🔐 Authentication
 
 CyberChic includes an authentication layer designed around **Expo AuthSession** and Google OAuth.
 
-The repository currently contains the OAuth integration structure and configuration placeholders required for connecting Google authentication to a specific development environment.
+The repository contains the OAuth integration structure and configuration placeholders required for connecting Google authentication to a specific development environment.
 
-To enable Google authentication for your own setup, you will need to configure the appropriate OAuth client IDs and redirect settings.
-
-The application also supports local profiles, allowing the core wardrobe experience to be used without requiring a remote backend.
+To enable Google authentication for your own setup, you can configure your Google Cloud OAuth client IDs. The application also supports local profiles with custom avatars (selfies, gallery images, custom emojis) and immediate Gmail profile resolution, allowing the core wardrobe experience to work seamlessly offline.
 
 ---
 
 ## 💾 Data & Privacy
 
-CyberChic 95 is intentionally designed without a dedicated application backend.
+CyberChic 95 is intentionally designed with a local-first architecture without a mandatory remote backend.
 
 Wardrobe, lookbook, profile, and application settings are persisted locally using **AsyncStorage** and, on web, the corresponding browser storage mechanism.
 
-This means there is no CyberChic database storing your wardrobe on a remote server.
-
-However, local storage should not be interpreted as absolute security or anonymity: data stored on a device is subject to that device's operating system, browser, backups, and other local security mechanisms.
+Deleting a profile performs a clean **cascade deletion**, removing all associated garments and lookbook records to prevent orphaned storage data.
 
 ---
 
@@ -427,7 +439,7 @@ The project is built with React Native and Expo and targets:
 - Android
 - Web
 
-Tablet and desktop experiences are supported through the responsive UI, although the project is primarily designed as a cross-platform application rather than a native desktop application.
+Responsive UI layouts adapt seamlessly between narrow smartphones (e.g. iPhone SE) and widescreen desktop browsers without overflow or clipped controls.
 
 ---
 
@@ -442,38 +454,37 @@ For example:
 ```text
 Garment
    ↓
-Color analysis
+Color analysis (HSL)
    ↓
-Pattern analysis
+Pattern balance
    ↓
 Style compatibility
    ↓
 Season compatibility
    ↓
-Match score
+Match score & Cher Horowitz quote
    ↓
-Verdict + feedback
+Verdict + explanation
 ```
 
-The same matching logic can then be reused by both:
-
-- the manual outfit matcher
-- the **DRESS ME** generator
+The same matching logic is shared by both:
+- the manual outfit carousel matcher
+- the **DRESS ME** slot machine generator
 
 ---
 
-## 🔮 Future Improvements
+## 🔮 Roadmap & Enhancements
 
-- [ ] Complete production Google OAuth configuration
-- [ ] Add automated tests for the matching engine
-- [ ] Add automated tests for wardrobe and profile persistence
-- [ ] Improve outfit generation with more advanced search strategies
-- [ ] Add personalized matching based on user preferences
-- [ ] Add wardrobe statistics and insights
-- [ ] Improve image management for custom garments
-- [ ] Add cloud synchronization as an optional feature
-- [ ] Add more _Clueless_-inspired easter eggs
-- [ ] Prepare production builds for mobile distribution
+- [x] Complete CRUD wardrobe management (Create, Edit in-place, Delete permanently, Reset pack)
+- [x] Multi-user profile management with avatar customization (Camera selfie, Photo gallery, Custom emoji picker)
+- [x] Multi-factor algorithmic fashion matching engine (HSL color harmony, pattern dynamics, style formality matrix)
+- [x] Slot machine "DRESS ME" outfit generation
+- [x] Automated test suite for matching engine and storage persistence (`npm test`)
+- [x] Cascade deletion preventing orphaned AsyncStorage records
+- [x] Cross-platform responsive styling (Mobile, Tablet, Web)
+- [ ] Cloud backend synchronization (optional v2 feature)
+- [ ] Production Google Cloud OAuth client credentials for direct enterprise sign-in
+- [ ] AI-powered background removal for snapped garment photos
 
 ---
 

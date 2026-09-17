@@ -18,9 +18,11 @@ interface BrowseModalProps {
   visible: boolean;
   userName?: string;
   garments: Garment[];
+  initialCategory?: 'all' | GarmentCategory;
   onClose: () => void;
   onSelectGarment: (garment: Garment) => void;
   onOpenAddModal: () => void;
+  onEditGarment?: (garment: Garment) => void;
   onDeleteGarment: (id: string) => void;
   onResetWardrobe: () => void;
 }
@@ -29,13 +31,21 @@ export const BrowseModal: React.FC<BrowseModalProps> = ({
   visible,
   userName = 'User',
   garments,
+  initialCategory = 'all',
   onClose,
   onSelectGarment,
   onOpenAddModal,
+  onEditGarment,
   onDeleteGarment,
   onResetWardrobe,
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState<'all' | GarmentCategory>('all');
+  const [selectedFilter, setSelectedFilter] = useState<'all' | GarmentCategory>(initialCategory);
+
+  React.useEffect(() => {
+    if (visible) {
+      setSelectedFilter(initialCategory);
+    }
+  }, [visible, initialCategory]);
 
   const filteredGarments = garments.filter((g) => {
     if (selectedFilter === 'all') return true;
@@ -122,17 +132,31 @@ export const BrowseModal: React.FC<BrowseModalProps> = ({
               >
                 <View style={styles.cardHeader}>
                   <Text style={styles.cardCatBadge}>{garment.category.toUpperCase()}</Text>
-                  {garment.isCustom && (
+                  <View style={styles.cardActionGroup}>
+                    {onEditGarment && (
+                      <Pressable
+                        onPress={(e) => {
+                          e.stopPropagation();
+                          onClose();
+                          onEditGarment(garment);
+                        }}
+                        style={styles.actionBadge}
+                        hitSlop={6}
+                      >
+                        <Text style={styles.actionBadgeText}>✏️</Text>
+                      </Pressable>
+                    )}
                     <Pressable
                       onPress={(e) => {
                         e.stopPropagation();
                         confirmDelete(garment);
                       }}
-                      style={styles.deleteBadge}
+                      style={[styles.actionBadge, styles.deleteBadge]}
+                      hitSlop={6}
                     >
                       <Text style={styles.deleteBadgeText}>✕</Text>
                     </Pressable>
-                  )}
+                  </View>
                 </View>
 
                 <View style={styles.illustrationBox}>
@@ -280,13 +304,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 1,
   },
-  deleteBadge: {
-    backgroundColor: '#ff0033',
-    width: 16,
-    height: 16,
-    borderRadius: 8,
+  cardActionGroup: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  actionBadge: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#9ca3af',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  actionBadgeText: {
+    fontSize: 9,
+  },
+  deleteBadge: {
+    backgroundColor: '#ff0033',
+    borderColor: '#b91c1c',
   },
   deleteBadgeText: {
     color: '#fff',
